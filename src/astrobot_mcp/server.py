@@ -185,7 +185,7 @@ def main():
         app = Starlette(
             routes=[
                 Route("/healthz", healthz),
-                Mount("/mcp", app=mcp.streamable_http_app("/mcp")),
+                Mount("/", app=mcp.streamable_http_app()),
             ],
             lifespan=lifespan,
         )
