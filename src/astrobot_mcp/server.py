@@ -1,3 +1,6 @@
+from starlette.applications import Starlette
+from starlette.responses import PlainTextResponse
+from starlette.routing import Mount, Route
 from mcp.server.fastmcp import FastMCP
 
 from astrobot_mcp.tools import astrospheric, dso, ephemeris, planning
@@ -158,9 +161,27 @@ def get_altitude_profile(
     return planning.get_altitude_profile(target_name, date, latitude, longitude)
 
 
+async def healthz(request):
+    return PlainTextResponse("ok")
+
+
 def main():
+    import contextlib
     import uvicorn
-    app = mcp.streamable_http_app()
+
+    @contextlib.asynccontextmanager
+    async def lifespan(app):
+        async with contextlib.AsyncExitStack() as stack:
+            await stack.enter_async_context(mcp.session_manager.run())
+            yield
+
+    app = Starlette(
+        routes=[
+            Route("/healthz", healthz),
+            Mount("/mcp", app=mcp.streamable_http_app()),
+        ],
+        lifespan=lifespan,
+    )
     uvicorn.run(app, host="0.0.0.0", port=8080)
 
 

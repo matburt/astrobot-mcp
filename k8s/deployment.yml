@@ -42,13 +42,13 @@ spec:
               memory: 1Gi
           readinessProbe:
             httpGet:
-              path: /mcp
+              path: /healthz
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /mcp
+              path: /healthz
               port: 8080
             initialDelaySeconds: 10
             periodSeconds: 30
