@@ -14,4 +14,4 @@ RUN python -c "from skyfield.api import load; load.directory = '/data/skyfield';
 
 EXPOSE 8080
 
-CMD ["astrobot-mcp"]
+CMD ["astrobot-mcp", "--http"]

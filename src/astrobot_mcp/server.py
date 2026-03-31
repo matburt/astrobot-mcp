@@ -166,23 +166,32 @@ async def healthz(request):
 
 
 def main():
-    import contextlib
-    import uvicorn
+    import sys
 
-    @contextlib.asynccontextmanager
-    async def lifespan(app):
-        async with contextlib.AsyncExitStack() as stack:
-            await stack.enter_async_context(mcp.session_manager.run())
-            yield
+    transport = "stdio"
+    if "--http" in sys.argv:
+        transport = "http"
 
-    app = Starlette(
-        routes=[
-            Route("/healthz", healthz),
-            Mount("/mcp", app=mcp.streamable_http_app()),
-        ],
-        lifespan=lifespan,
-    )
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    if transport == "http":
+        import contextlib
+        import uvicorn
+
+        @contextlib.asynccontextmanager
+        async def lifespan(app):
+            async with contextlib.AsyncExitStack() as stack:
+                await stack.enter_async_context(mcp.session_manager.run())
+                yield
+
+        app = Starlette(
+            routes=[
+                Route("/healthz", healthz),
+                Mount("/mcp", app=mcp.streamable_http_app("/mcp")),
+            ],
+            lifespan=lifespan,
+        )
+        uvicorn.run(app, host="0.0.0.0", port=8080)
+    else:
+        mcp.run(transport="stdio")
 
 
 if __name__ == "__main__":
