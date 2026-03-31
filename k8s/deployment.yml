@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: astrobot-mcp
-          image: ghcr.io/bsdmatburt/astrobot-mcp:latest
+          image: ghcr.io/matburt/astrobot-mcp:latest
           ports:
             - containerPort: 8080
           env:
