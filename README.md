@@ -23,6 +23,21 @@ Built for use with [OpenClaw](https://openclaw.rocks) AstroBot agent but works w
 - **whats_visible** — Find DSOs visible tonight with altitude and Moon constraints
 - **get_altitude_profile** — Hourly altitude profile for imaging window planning
 
+## Astrospheric API Key
+
+The weather/atmospheric tools (`get_forecast`, `get_sky`) require an
+[Astrospheric Professional](https://astrospheric.com) subscription.
+Pro members receive a private API key (found under **My Profile**) and
+100 credits/day (resets at midnight UTC). Per-call costs: `get_forecast` = 5 credits,
+`get_sky` = 1 credit. Commercial use requires separate arrangements —
+contact developer@astrospheric.com.
+
+See the [API documentation](https://www.astrospheric.com/DynamicContent/api_info.html)
+for full details.
+
+The DSO catalog, ephemeris, and observation planning tools work entirely
+offline and do not require an API key.
+
 ## Running Locally
 
 ```bash
